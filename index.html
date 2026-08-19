@@ -1,0 +1,2007 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#174f8f">
+  <title>Средства выразительности — цифровой тренажёр</title>
+  <style>
+    :root {
+      --blue-950: #102f53;
+      --blue-800: #174f8f;
+      --blue-700: #2168b3;
+      --blue-100: #eaf3fc;
+      --blue-50: #f5f9fe;
+      --green-800: #236b3b;
+      --green-100: #e9f7ee;
+      --amber-800: #8a5800;
+      --amber-100: #fff4d7;
+      --red-800: #a33131;
+      --red-100: #fdecec;
+      --ink: #162231;
+      --muted: #5b6878;
+      --line: #d6e0ea;
+      --surface: #ffffff;
+      --canvas: #eef4f9;
+      --shadow: 0 18px 50px rgba(34, 65, 99, 0.12);
+      --radius-xl: 26px;
+      --radius-lg: 18px;
+      --radius-md: 13px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-width: 320px;
+      color-scheme: light;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0%, rgba(72, 145, 214, 0.17), transparent 30rem),
+        radial-gradient(circle at 95% 12%, rgba(64, 155, 98, 0.12), transparent 26rem),
+        var(--canvas);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      line-height: 1.5;
+    }
+
+    button,
+    select,
+    input {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    select:focus-visible,
+    [tabindex]:focus-visible {
+      outline: 3px solid rgba(33, 104, 179, 0.34);
+      outline-offset: 3px;
+    }
+
+    .app-shell {
+      width: min(100% - 28px, 1000px);
+      margin: 0 auto;
+      padding: 22px 0 34px;
+    }
+
+    .screen[hidden],
+    [hidden] {
+      display: none !important;
+    }
+
+    .top-brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 2px 18px;
+      color: var(--blue-950);
+      font-size: 0.88rem;
+      font-weight: 750;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .brand-icon {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 11px;
+      color: #fff;
+      background: var(--blue-800);
+      box-shadow: 0 7px 18px rgba(23, 79, 143, 0.22);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.17rem;
+    }
+
+    .author {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .panel {
+      border: 1px solid rgba(203, 216, 228, 0.85);
+      border-radius: var(--radius-xl);
+      background: rgba(255, 255, 255, 0.97);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(24px, 5vw, 52px);
+    }
+
+    .hero::after {
+      position: absolute;
+      top: -72px;
+      right: -74px;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, rgba(33, 104, 179, 0.12), rgba(35, 107, 59, 0.05));
+      content: "";
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      margin: 0 0 9px;
+      color: var(--blue-700);
+      font-size: 0.83rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin-bottom: 13px;
+      color: var(--blue-950);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.025em;
+    }
+
+    .lead {
+      max-width: 720px;
+      margin-bottom: 27px;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+    }
+
+    .topic-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .pill,
+    .mode-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 11px;
+      border: 1px solid #cfe0f1;
+      border-radius: 999px;
+      color: var(--blue-950);
+      background: var(--blue-50);
+      font-size: 0.83rem;
+      font-weight: 700;
+    }
+
+    .resume-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 0 0 24px;
+      padding: 16px 18px;
+      border: 1px solid #bed6ed;
+      border-radius: var(--radius-lg);
+      background: var(--blue-100);
+    }
+
+    .resume-box strong,
+    .resume-box span {
+      display: block;
+    }
+
+    .resume-box span {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 13px;
+    }
+
+    .mode-card {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: #fff;
+    }
+
+    .mode-card h2 {
+      margin-bottom: 7px;
+      color: var(--blue-950);
+      font-size: 1.3rem;
+    }
+
+    .mode-card p {
+      flex: 1;
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .select-row {
+      display: grid;
+      gap: 7px;
+      margin-bottom: 13px;
+    }
+
+    .select-row label {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    select {
+      width: 100%;
+      min-height: 46px;
+      padding: 8px 38px 8px 12px;
+      border: 1px solid #bdccdc;
+      border-radius: 11px;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .ghost-btn,
+    .answer-btn {
+      min-height: 48px;
+      border-radius: 12px;
+      font-weight: 760;
+      cursor: pointer;
+      transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease, border-color 150ms ease;
+    }
+
+    .primary-btn:hover,
+    .secondary-btn:hover,
+    .ghost-btn:hover,
+    .answer-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    .primary-btn {
+      padding: 11px 18px;
+      border: 1px solid var(--blue-800);
+      color: #fff;
+      background: var(--blue-800);
+      box-shadow: 0 9px 20px rgba(23, 79, 143, 0.17);
+    }
+
+    .primary-btn:hover {
+      background: var(--blue-700);
+    }
+
+    .secondary-btn {
+      padding: 11px 18px;
+      border: 1px solid #b8cee4;
+      color: var(--blue-950);
+      background: var(--blue-100);
+    }
+
+    .ghost-btn {
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      color: var(--blue-950);
+      background: #fff;
+    }
+
+    .ghost-btn.compact {
+      min-height: 40px;
+      padding: 7px 12px;
+      font-size: 0.88rem;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.58;
+      transform: none !important;
+    }
+
+    .start-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .micro-note {
+      margin: 20px 0 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .game-panel {
+      padding: clamp(18px, 4vw, 38px);
+    }
+
+    .game-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .game-toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 0.89rem;
+      font-weight: 700;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e3eaf1;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue-700), #3f9a66);
+      transition: width 280ms ease;
+    }
+
+    .question-area {
+      padding: clamp(25px, 5vw, 48px) 0 10px;
+    }
+
+    .task-label {
+      margin-bottom: 15px;
+      color: var(--blue-700);
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .sentence {
+      max-width: 850px;
+      margin: 0 0 22px;
+      color: var(--blue-950);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.42rem, 4vw, 2.18rem);
+      line-height: 1.46;
+    }
+
+    mark {
+      padding: 0.06em 0.15em 0.09em;
+      border-radius: 0.2em;
+      color: inherit;
+      background: linear-gradient(180deg, transparent 54%, #ffe39a 54%);
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+
+    .instruction {
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    .answers-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .answer-btn {
+      min-width: 0;
+      padding: 12px 9px;
+      border: 1px solid #c4d1df;
+      color: var(--blue-950);
+      background: #fff;
+      box-shadow: 0 5px 14px rgba(44, 72, 104, 0.06);
+      font-size: clamp(0.82rem, 1.5vw, 0.98rem);
+      overflow-wrap: anywhere;
+    }
+
+    .answer-btn:hover:not(:disabled) {
+      border-color: var(--blue-700);
+      background: var(--blue-50);
+    }
+
+    .answer-btn.is-wrong {
+      border-color: #d88f8f;
+      color: var(--red-800);
+      background: var(--red-100);
+      opacity: 1;
+    }
+
+    .answer-btn.is-correct {
+      border-color: #74aa86;
+      color: var(--green-800);
+      background: var(--green-100);
+      opacity: 1;
+    }
+
+    .answer-btn.is-selected {
+      border-color: var(--blue-700);
+      color: var(--blue-950);
+      background: var(--blue-100);
+      opacity: 1;
+    }
+
+    .feedback {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid;
+      border-radius: var(--radius-md);
+    }
+
+    .feedback.success {
+      border-color: #add2b9;
+      background: var(--green-100);
+    }
+
+    .feedback.warning {
+      border-color: #ead095;
+      background: var(--amber-100);
+    }
+
+    .feedback.error {
+      border-color: #edb8b8;
+      background: var(--red-100);
+    }
+
+    .feedback.neutral {
+      border-color: #bed6ed;
+      background: var(--blue-100);
+    }
+
+    .feedback-icon {
+      display: grid;
+      width: 31px;
+      height: 31px;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.74);
+      font-weight: 900;
+    }
+
+    .feedback-title {
+      margin: 0 0 2px;
+      font-weight: 850;
+    }
+
+    .feedback-text {
+      margin: 0;
+      color: #344253;
+      font-size: 0.94rem;
+    }
+
+    .next-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 17px;
+    }
+
+    .result-panel {
+      padding: clamp(22px, 5vw, 48px);
+    }
+
+    .result-head {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      align-items: center;
+      gap: clamp(22px, 5vw, 48px);
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .score-ring {
+      display: grid;
+      width: 164px;
+      height: 164px;
+      place-items: center;
+      border-radius: 50%;
+      background: conic-gradient(var(--blue-700) 0deg, var(--blue-700) 0deg, #e2e9f0 0deg);
+      box-shadow: inset 0 0 0 1px rgba(18, 58, 102, 0.05);
+    }
+
+    .score-ring-inner {
+      display: grid;
+      width: 126px;
+      height: 126px;
+      place-items: center;
+      border-radius: 50%;
+      background: #fff;
+      text-align: center;
+    }
+
+    .score-number {
+      display: block;
+      color: var(--blue-950);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2.45rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .score-caption {
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .result-copy h1 {
+      margin-bottom: 9px;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+    }
+
+    .result-copy p {
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+
+    .summary-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 11px;
+      margin: 22px 0;
+    }
+
+    .stat-card {
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--blue-50);
+    }
+
+    .stat-card span,
+    .stat-card strong {
+      display: block;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .stat-card strong {
+      margin-top: 3px;
+      color: var(--blue-950);
+      font-size: 1.18rem;
+    }
+
+    .section-title {
+      margin: 28px 0 13px;
+      color: var(--blue-950);
+      font-size: 1.25rem;
+    }
+
+    .category-results {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .category-result {
+      padding: 13px 10px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      text-align: center;
+    }
+
+    .category-result strong,
+    .category-result span {
+      display: block;
+    }
+
+    .category-result strong {
+      color: var(--blue-950);
+      font-size: 1.16rem;
+    }
+
+    .category-result span {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.73rem;
+      overflow-wrap: anywhere;
+    }
+
+    .recommendation {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue-700);
+      border-radius: 5px 12px 12px 5px;
+      background: var(--blue-100);
+      color: #2b4058;
+    }
+
+    .mistakes-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .mistake-card {
+      padding: 16px;
+      border: 1px solid #ead3d3;
+      border-radius: var(--radius-md);
+      background: #fffafa;
+    }
+
+    .mistake-number {
+      margin-bottom: 7px;
+      color: var(--red-800);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .mistake-sentence {
+      margin-bottom: 9px;
+      color: var(--blue-950);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.08rem;
+    }
+
+    .mistake-meta {
+      display: grid;
+      gap: 3px;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .mistake-explanation {
+      margin: 0;
+      color: #364658;
+      font-size: 0.91rem;
+    }
+
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 27px;
+    }
+
+    dialog {
+      width: min(920px, calc(100% - 26px));
+      max-height: min(86vh, 820px);
+      padding: 0;
+      overflow: auto;
+      border: 0;
+      border-radius: 22px;
+      color: var(--ink);
+      background: #fff;
+      box-shadow: 0 28px 90px rgba(14, 39, 67, 0.3);
+    }
+
+    dialog::backdrop {
+      background: rgba(12, 32, 55, 0.56);
+      backdrop-filter: blur(3px);
+    }
+
+    .dialog-head {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 17px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    .dialog-head h2 {
+      margin: 0;
+      color: var(--blue-950);
+      font-size: 1.3rem;
+    }
+
+    .icon-btn {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      color: var(--blue-950);
+      background: #fff;
+      font-size: 1.3rem;
+      cursor: pointer;
+    }
+
+    .theory-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 20px;
+    }
+
+    .theory-card {
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--blue-50);
+    }
+
+    .theory-card:last-child {
+      grid-column: 1 / -1;
+    }
+
+    .theory-card h3 {
+      margin-bottom: 6px;
+      color: var(--blue-950);
+      font-size: 1.05rem;
+    }
+
+    .theory-card p {
+      margin-bottom: 7px;
+      color: #435166;
+      font-size: 0.91rem;
+    }
+
+    .theory-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .example {
+      color: var(--blue-800) !important;
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+    }
+
+    .page-footer {
+      margin-top: 18px;
+      color: #758190;
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    @media (max-width: 820px) {
+      .answers-grid,
+      .category-results {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .answer-btn:last-child,
+      .category-result:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .app-shell {
+        width: min(100% - 18px, 1000px);
+        padding-top: 10px;
+      }
+
+      .top-brand {
+        margin-bottom: 10px;
+      }
+
+      .author {
+        display: none;
+      }
+
+      .hero,
+      .game-panel,
+      .result-panel {
+        border-radius: 19px;
+      }
+
+      .mode-grid,
+      .result-head,
+      .theory-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .theory-card:last-child {
+        grid-column: auto;
+      }
+
+      .resume-box {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .game-toolbar {
+        align-items: flex-start;
+      }
+
+      .game-toolbar-right {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+      }
+
+      .mode-badge {
+        font-size: 0.75rem;
+      }
+
+      .result-head {
+        justify-items: center;
+        text-align: center;
+      }
+
+      .summary-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .hero {
+        padding: 23px 17px;
+      }
+
+      .game-panel,
+      .result-panel {
+        padding: 16px;
+      }
+
+      .answers-grid,
+      .category-results {
+        grid-template-columns: 1fr;
+      }
+
+      .answer-btn:last-child,
+      .category-result:last-child {
+        grid-column: auto;
+      }
+
+      .game-toolbar-right .ghost-btn {
+        padding-right: 9px;
+        padding-left: 9px;
+      }
+
+      .sentence {
+        font-size: 1.35rem;
+      }
+
+      .feedback {
+        grid-template-columns: 1fr;
+      }
+
+      .feedback-icon {
+        width: 28px;
+        height: 28px;
+      }
+
+      .result-actions > button {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <div class="top-brand">
+      <span class="brand-mark"><span class="brand-icon" aria-hidden="true">А</span> Русский язык · 9 класс</span>
+      <span class="author">Тренажёр Сергея Дубовицкого</span>
+    </div>
+
+    <section class="screen" id="startScreen">
+      <div class="panel hero">
+        <p class="eyebrow">Подготовка к ОГЭ</p>
+        <h1>Средства выразительности</h1>
+        <p class="lead">Научитесь уверенно различать пять средств языка. В каждом задании определите средство выразительности в выделенном фрагменте.</p>
+
+        <div class="topic-pills" aria-label="Темы тренажёра">
+          <span class="pill">Эпитет</span>
+          <span class="pill">Метафора</span>
+          <span class="pill">Сравнение</span>
+          <span class="pill">Олицетворение</span>
+          <span class="pill">Фразеологизм</span>
+        </div>
+
+        <div class="resume-box" id="resumeBox" hidden>
+          <div>
+            <strong>Есть незавершённая работа</strong>
+            <span id="resumeDescription"></span>
+          </div>
+          <button class="primary-btn" id="resumeBtn" type="button">Продолжить</button>
+        </div>
+
+        <div class="mode-grid">
+          <article class="mode-card">
+            <h2>Тренировка</h2>
+            <p>Две попытки, подсказка после ошибки и объяснение каждого ответа. Можно открыть памятку.</p>
+            <div class="select-row">
+              <label for="trainingCount">Количество заданий</label>
+              <select id="trainingCount">
+                <option value="10">10 заданий</option>
+                <option value="20" selected>20 заданий</option>
+                <option value="50">Все 50 заданий</option>
+              </select>
+            </div>
+            <button class="primary-btn" id="startTrainingBtn" type="button">Начать тренировку</button>
+          </article>
+
+          <article class="mode-card">
+            <h2>Проверить себя</h2>
+            <p>20 случайных заданий, по четыре на каждый вид. Одна попытка, без подсказок и памятки.</p>
+            <button class="secondary-btn" id="startCheckBtn" type="button">Начать проверку</button>
+          </article>
+        </div>
+
+        <div class="start-actions">
+          <button class="ghost-btn" id="openTheoryStartBtn" type="button">Открыть памятку</button>
+        </div>
+        <p class="micro-note">Результат показывается только на этом устройстве. Никакие данные не отправляются.</p>
+      </div>
+    </section>
+
+    <section class="screen" id="gameScreen" hidden>
+      <div class="panel game-panel">
+        <div class="game-toolbar">
+          <button class="ghost-btn compact" id="homeBtn" type="button">← На главную</button>
+          <div class="game-toolbar-right">
+            <button class="ghost-btn compact" id="openTheoryGameBtn" type="button">Памятка</button>
+            <span class="mode-badge" id="modeBadge"></span>
+          </div>
+        </div>
+
+        <div class="progress-meta">
+          <span id="questionCounter">Задание 1 из 20</span>
+          <span id="timerDisplay">00:00</span>
+        </div>
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="question-area">
+          <p class="task-label">Определите средство выразительности</p>
+          <p class="sentence" id="sentence" aria-live="polite"><span id="sentenceBefore"></span><mark id="sentenceTarget"></mark><span id="sentenceAfter"></span></p>
+          <p class="instruction">Какое средство использовано в выделенном фрагменте?</p>
+          <div class="answers-grid" id="answersGrid"></div>
+
+          <div class="feedback" id="feedback" role="status" aria-live="polite" hidden>
+            <span class="feedback-icon" id="feedbackIcon" aria-hidden="true"></span>
+            <div>
+              <p class="feedback-title" id="feedbackTitle"></p>
+              <p class="feedback-text" id="feedbackText"></p>
+            </div>
+          </div>
+
+          <div class="next-row">
+            <button class="primary-btn" id="nextBtn" type="button" hidden>Следующее задание</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="resultScreen" hidden>
+      <div class="panel result-panel">
+        <div class="result-head">
+          <div class="score-ring" id="scoreRing" aria-label="Результат в процентах">
+            <div class="score-ring-inner">
+              <div>
+                <span class="score-number" id="scorePercent">0%</span>
+                <span class="score-caption">верно с первой попытки</span>
+              </div>
+            </div>
+          </div>
+          <div class="result-copy">
+            <p class="eyebrow">Работа завершена</p>
+            <h1 id="resultTitle">Результат</h1>
+            <p id="resultMessage"></p>
+          </div>
+        </div>
+
+        <div class="summary-stats">
+          <div class="stat-card"><span>Верно</span><strong id="correctStat">0 из 0</strong></div>
+          <div class="stat-card"><span>Время</span><strong id="timeStat">00:00</strong></div>
+          <div class="stat-card"><span>Режим</span><strong id="modeStat">Тренировка</strong></div>
+        </div>
+
+        <h2 class="section-title">Результат по темам</h2>
+        <div class="category-results" id="categoryResults"></div>
+        <div class="recommendation" id="recommendation"></div>
+
+        <div id="mistakesSection">
+          <h2 class="section-title">Разбор ошибок</h2>
+          <div class="mistakes-list" id="mistakesList"></div>
+        </div>
+
+        <div class="result-actions">
+          <button class="primary-btn" id="repeatMistakesBtn" type="button">Повторить ошибки</button>
+          <button class="secondary-btn" id="restartBtn" type="button">Начать заново</button>
+          <button class="ghost-btn" id="openTheoryResultBtn" type="button">Открыть памятку</button>
+        </div>
+      </div>
+    </section>
+
+    <p class="page-footer">Тренажёр работает автономно и не требует подключения к интернету.</p>
+  </main>
+
+  <dialog id="theoryDialog" aria-labelledby="theoryTitle">
+    <div class="dialog-head">
+      <h2 id="theoryTitle">Краткая памятка</h2>
+      <button class="icon-btn" id="closeTheoryBtn" type="button" aria-label="Закрыть памятку">×</button>
+    </div>
+    <div class="theory-grid">
+      <article class="theory-card">
+        <h3>Эпитет</h3>
+        <p>Красочное образное определение. Обычно отвечает на вопрос «какой?» и помогает увидеть авторскую оценку или образ.</p>
+        <p class="example">свинцовые тучи, хрустальный звон</p>
+      </article>
+      <article class="theory-card">
+        <h3>Метафора</h3>
+        <p>Скрытое сравнение: свойства одного предмета переносятся на другой на основе сходства. Союзов «как», «словно», «будто» нет.</p>
+        <p class="example">золото листвы, волна воспоминаний</p>
+      </article>
+      <article class="theory-card">
+        <h3>Сравнение</h3>
+        <p>Открытое сопоставление предметов. Частые указатели: «как», «словно», «будто», «точно».</p>
+        <p class="example">капли словно алмазы</p>
+      </article>
+      <article class="theory-card">
+        <h3>Олицетворение</h3>
+        <p>Неодушевлённый предмет или явление получает признаки, чувства или действия живого существа.</p>
+        <p class="example">дождь шептал, лес прислушивался</p>
+      </article>
+      <article class="theory-card">
+        <h3>Фразеологизм</h3>
+        <p>Устойчивое сочетание с целостным переносным значением. Его нельзя свободно заменить или понять буквально по отдельным словам.</p>
+        <p class="example">не покладая рук, найти общий язык</p>
+      </article>
+    </div>
+  </dialog>
+
+  <script>
+    "use strict";
+
+    const CATEGORIES = ["Эпитет", "Метафора", "Сравнение", "Олицетворение", "Фразеологизм"];
+    const STORAGE_KEY = "sergey-expressive-means-trainer-v1";
+    const DATA_VERSION = 1;
+
+    const QUESTIONS = [
+      {
+        id: 1,
+        parts: ["Сквозь ", "тяжёлые свинцовые тучи", " пробивался первый луч солнца."],
+        answer: "Эпитет",
+        hint: "Ищите образное определение, которое отвечает на вопрос «какие?». Погода здесь описана не буквально.",
+        explanation: "«Свинцовые» — образное определение: тучи уподоблены тяжёлому серому свинцу. Это эпитет."
+      },
+      {
+        id: 2,
+        parts: ["За окном ", "осенний дождь тихо шептал", "."],
+        answer: "Олицетворение",
+        hint: "Может ли дождь буквально выполнять это действие живого существа?",
+        explanation: "Дождю приписано человеческое действие «шептал». Это олицетворение."
+      },
+      {
+        id: 3,
+        parts: ["Мы трудились ", "не покладая рук", ", чтобы завершить строительство до заморозков."],
+        answer: "Фразеологизм",
+        hint: "Попробуйте заменить выделенные слова одним наречием: «усердно».",
+        explanation: "«Не покладая рук» — устойчивое сочетание со значением «усердно, без отдыха». Это фразеологизм."
+      },
+      {
+        id: 4,
+        parts: ["Капли вечерней росы на траве блестели, ", "словно крошечные алмазы", "."],
+        answer: "Сравнение",
+        hint: "Обратите внимание на союз «словно».",
+        explanation: "Капли прямо сопоставлены с алмазами при помощи союза «словно». Это сравнение."
+      },
+      {
+        id: 5,
+        parts: ["В опустевшем осеннем саду горел ", "красный костёр рябины", "."],
+        answer: "Метафора",
+        hint: "Рябина не является настоящим костром: сходство передано без союзов «как» или «словно».",
+        explanation: "Красные гроздья рябины представлены как пылающий костёр. Скрытое сравнение без сравнительного союза — метафора."
+      },
+      {
+        id: 6,
+        parts: ["В глухой сибирской тайге стояла ", "мёртвая тишина", "."],
+        answer: "Эпитет",
+        hint: "Выделенное сочетание содержит образное определение тишины.",
+        explanation: "Определение «мёртвая» образно подчёркивает полное отсутствие звуков. Это эпитет."
+      },
+      {
+        id: 7,
+        parts: ["Под порывами ветра ", "старый дуб тяжело вздыхал и кряхтел", "."],
+        answer: "Олицетворение",
+        hint: "Дереву приписаны действия, характерные для живого существа.",
+        explanation: "Дуб «вздыхает» и «кряхтит», словно живой человек. Это олицетворение."
+      },
+      {
+        id: 8,
+        parts: ["Узнав о результатах экзамена, мальчик почувствовал себя ", "на седьмом небе от счастья", "."],
+        answer: "Фразеологизм",
+        hint: "Выражение имеет целостное значение «быть очень счастливым».",
+        explanation: "«На седьмом небе от счастья» — устойчивое выражение со значением высшей степени радости. Это фразеологизм."
+      },
+      {
+        id: 9,
+        parts: ["Пожилого капитана внезапно ", "захлестнула волна воспоминаний", ", когда он ступил на палубу."],
+        answer: "Метафора",
+        hint: "Воспоминания изображены как водная стихия, хотя сравнительного союза нет.",
+        explanation: "Воспоминания перенесены в образ волны, которая может захлестнуть человека. Это метафора."
+      },
+      {
+        id: 10,
+        parts: ["Тонкая берёзка дрожала на ветру, ", "точно испуганная птица", "."],
+        answer: "Сравнение",
+        hint: "Сопоставление вводится словом «точно».",
+        explanation: "Берёзка прямо сопоставлена с испуганной птицей при помощи слова «точно». Это сравнение."
+      },
+      {
+        id: 11,
+        parts: ["На оконном стекле появились ", "причудливые серебряные узоры", "."],
+        answer: "Эпитет",
+        hint: "Определение передаёт не материал, а блеск и оттенок узоров.",
+        explanation: "«Серебряные» образно передаёт цвет и блеск морозных узоров. Это эпитет."
+      },
+      {
+        id: 12,
+        parts: ["", "Одинокий ручей оживлённо спорил с прибрежными камешками", "."],
+        answer: "Олицетворение",
+        hint: "Спорить способен человек, но действие приписано ручью.",
+        explanation: "Ручей наделён человеческой способностью спорить. Это олицетворение."
+      },
+      {
+        id: 13,
+        parts: ["Не стоит ", "делать из мухи слона", " и расстраиваться из-за незначительной ошибки."],
+        answer: "Фразеологизм",
+        hint: "У выражения есть устойчивое переносное значение «сильно преувеличивать».",
+        explanation: "«Делать из мухи слона» означает преувеличивать значение чего-либо. Это фразеологизм."
+      },
+      {
+        id: 14,
+        parts: ["Вдоль лесных тропинок сияло ", "золото увядающей листвы", "."],
+        answer: "Метафора",
+        hint: "Листва названа золотом на основе сходства цвета и блеска.",
+        explanation: "Жёлтая листва прямо названа золотом без сравнительного союза. Это метафора."
+      },
+      {
+        id: 15,
+        parts: ["Голос экскурсовода звучал гулко и глухо, ", "как в пустом каменном колодце", "."],
+        answer: "Сравнение",
+        hint: "Явный признак — союз «как».",
+        explanation: "Звучание голоса сопоставлено со звучанием в пустом колодце при помощи союза «как». Это сравнение."
+      },
+      {
+        id: 16,
+        parts: ["Её ласковый, ", "бархатный голос", " мгновенно успокаивал встревоженных детей."],
+        answer: "Эпитет",
+        hint: "Тактильное свойство ткани перенесено на характеристику голоса.",
+        explanation: "«Бархатный» — образное определение мягкого, приятного голоса. Это эпитет."
+      },
+      {
+        id: 17,
+        parts: ["С грохотом ", "сердитое море бросало пенные валы", " на прибрежные скалы."],
+        answer: "Олицетворение",
+        hint: "Природная стихия получает чувство и целенаправленное действие живого существа.",
+        explanation: "Море названо «сердитым» и изображено бросающим валы. Оно наделено признаками живого существа — это олицетворение."
+      },
+      {
+        id: 18,
+        parts: ["На уроке литературы ученик ", "сидел сложа руки", " и о чём-то мечтал."],
+        answer: "Фразеологизм",
+        hint: "Выражение означает бездействие, а не только положение рук.",
+        explanation: "«Сидеть сложа руки» — устойчивое сочетание со значением «бездействовать». Это фразеологизм."
+      },
+      {
+        id: 19,
+        parts: ["В густых ветвях старого вяза виднелся ", "лунный серп", "."],
+        answer: "Метафора",
+        hint: "Форма месяца уподоблена предмету без союза сравнения.",
+        explanation: "Месяц назван серпом на основе сходства формы. Это метафора."
+      },
+      {
+        id: 20,
+        parts: ["Снег под ногами путников скрипел, ", "будто сухой крахмал", "."],
+        answer: "Сравнение",
+        hint: "Сопоставление вводится союзом «будто».",
+        explanation: "Скрип снега сопоставлен со звуком сухого крахмала при помощи союза «будто». Это сравнение."
+      },
+      {
+        id: 21,
+        parts: ["Над ночной степью простиралась ", "бездонная звёздная высь", "."],
+        answer: "Эпитет",
+        hint: "Образное определение подчёркивает кажущуюся бесконечность пространства.",
+        explanation: "«Бездонная» — образное определение необъятной небесной выси. Это эпитет."
+      },
+      {
+        id: 22,
+        parts: ["", "Весна на цыпочках вошла в город и разбудила вишнёвые сады", "."],
+        answer: "Олицетворение",
+        hint: "Время года ведёт себя как человек.",
+        explanation: "Весна «вошла» и «разбудила» сады, то есть получила человеческие действия. Это олицетворение."
+      },
+      {
+        id: 23,
+        parts: ["После долгих споров собеседники наконец ", "нашли общий язык", "."],
+        answer: "Фразеологизм",
+        hint: "Речь идёт не о новом языке, а о взаимопонимании.",
+        explanation: "«Найти общий язык» означает достичь взаимопонимания. Это устойчивый фразеологизм."
+      },
+      {
+        id: 24,
+        parts: ["В груди молодого воина разгоралось ", "пламя гнева", "."],
+        answer: "Метафора",
+        hint: "Чувство изображено как огонь без прямого сравнительного оборота.",
+        explanation: "Гнев представлен как разгорающееся пламя. Скрытое уподобление — метафора."
+      },
+      {
+        id: 25,
+        parts: ["Мысли метались в голове, ", "словно пойманные в сеть птицы", "."],
+        answer: "Сравнение",
+        hint: "Союз «словно» прямо связывает два образа.",
+        explanation: "Мечущиеся мысли сопоставлены с пойманными птицами при помощи союза «словно». Это сравнение."
+      },
+      {
+        id: 26,
+        parts: ["По узкой лесной реке медленно плыл ", "зловещий, непроглядный туман", "."],
+        answer: "Эпитет",
+        hint: "Определения создают выразительный и эмоционально окрашенный образ тумана.",
+        explanation: "«Зловещий, непроглядный» — образные определения, усиливающие тревожное впечатление. Это эпитеты."
+      },
+      {
+        id: 27,
+        parts: ["", "Метель сердито завывала и настойчиво стучала в ставни", "."],
+        answer: "Олицетворение",
+        hint: "Явление природы получает эмоцию и настойчивое действие живого существа.",
+        explanation: "Метель «сердится», «завывает» и «стучит», словно живое существо. Это олицетворение."
+      },
+      {
+        id: 28,
+        parts: ["Не нужно ", "водить меня за нос", ", говорите сразу всю правду."],
+        answer: "Фразеологизм",
+        hint: "Выражение имеет устойчивое значение «обманывать».",
+        explanation: "«Водить за нос» означает обманывать, вводить в заблуждение. Это фразеологизм."
+      },
+      {
+        id: 29,
+        parts: ["Чистое ", "зеркало лесного озера", " отражало лазурную синеву неба."],
+        answer: "Метафора",
+        hint: "Гладкая поверхность озера названа другим предметом на основе сходства.",
+        explanation: "Поверхность озера названа зеркалом, потому что отражает небо. Это метафора."
+      },
+      {
+        id: 30,
+        parts: ["Глаза маленькой девочки сияли от радости, ", "как две яркие звёздочки", "."],
+        answer: "Сравнение",
+        hint: "Явное сопоставление оформлено союзом «как».",
+        explanation: "Глаза сопоставлены со звёздочками при помощи союза «как». Это сравнение."
+      },
+      {
+        id: 31,
+        parts: ["Его охватила ", "безудержная, неистовая радость", "."],
+        answer: "Эпитет",
+        hint: "Выделенные определения эмоционально характеризуют силу чувства.",
+        explanation: "«Безудержная, неистовая» — выразительные образные определения радости. Это эпитеты."
+      },
+      {
+        id: 32,
+        parts: ["", "Тревога незаметно подкралась и поселилась в его сердце", "."],
+        answer: "Олицетворение",
+        hint: "Отвлечённое чувство действует как живое существо.",
+        explanation: "Тревога «подкралась» и «поселилась», то есть получила действия живого существа. Это олицетворение."
+      },
+      {
+        id: 33,
+        parts: ["Из-за собственной невнимательности он опять ", "попал впросак", "."],
+        answer: "Фразеологизм",
+        hint: "Выражение целиком означает «оказаться в неловком положении».",
+        explanation: "«Попасть впросак» — устойчивое сочетание со значением «оказаться в неловком положении». Это фразеологизм."
+      },
+      {
+        id: 34,
+        parts: ["", "Бег времени", " невозможно остановить."],
+        answer: "Метафора",
+        hint: "Время представлено как то, что способно бежать.",
+        explanation: "Движение времени изображено как бег. Это перенос значения на основе сходства, то есть метафора."
+      },
+      {
+        id: 35,
+        parts: ["Облака плыли по небосводу, ", "словно белоснежные парусники", "."],
+        answer: "Сравнение",
+        hint: "Союз «словно» открыто выражает сопоставление.",
+        explanation: "Облака сопоставлены с парусниками при помощи союза «словно». Это сравнение."
+      },
+      {
+        id: 36,
+        parts: ["Мы вышли на залитую солнцем ", "изумрудную поляну", "."],
+        answer: "Эпитет",
+        hint: "Определение образно передаёт насыщенный зелёный цвет травы.",
+        explanation: "«Изумрудную» — образное цветовое определение поляны. Это эпитет."
+      },
+      {
+        id: 37,
+        parts: ["За одну ночь ", "зима укутала берёзки мягким снегом", "."],
+        answer: "Олицетворение",
+        hint: "Время года выполняет заботливое целенаправленное действие.",
+        explanation: "Зима изображена существом, которое может укутать берёзки. Это олицетворение."
+      },
+      {
+        id: 38,
+        parts: ["Неожиданная новость надолго ", "выбила нас из колеи", "."],
+        answer: "Фразеологизм",
+        hint: "Сочетание имеет целостное переносное значение «нарушить привычное состояние».",
+        explanation: "«Выбить из колеи» означает нарушить привычный ход жизни или душевное равновесие. Это фразеологизм."
+      },
+      {
+        id: 39,
+        parts: ["На печальную мелодию скрипки отозвались ", "струны его души", "."],
+        answer: "Метафора",
+        hint: "Душевная восприимчивость представлена в образе музыкального инструмента.",
+        explanation: "Человеческие чувства уподоблены струнам, способным звучать и откликаться. Это метафора."
+      },
+      {
+        id: 40,
+        parts: ["Река под толстым слоем льда притихла, ", "словно уснувший в берлоге зверь", "."],
+        answer: "Сравнение",
+        hint: "Образ вводится союзом «словно».",
+        explanation: "Замёрзшая река сопоставлена с уснувшим зверем при помощи союза «словно». Это сравнение."
+      },
+      {
+        id: 41,
+        parts: ["По всей округе разносился ", "хрустальный звон", " праздничных колоколов."],
+        answer: "Эпитет",
+        hint: "Свойство прозрачного хрусталя образно характеризует чистоту звука.",
+        explanation: "«Хрустальный» — образное определение чистого, ясного звона. Это эпитет."
+      },
+      {
+        id: 42,
+        parts: ["", "Застенчивое солнце выглянуло из-за туч и подмигнуло прохожим", "."],
+        answer: "Олицетворение",
+        hint: "Солнцу приписаны поведение и жест человека.",
+        explanation: "Солнце изображено застенчивым и способным подмигнуть. Это олицетворение."
+      },
+      {
+        id: 43,
+        parts: ["Друзья понимали друг друга с полуслова и всегда жили ", "душа в душу", "."],
+        answer: "Фразеологизм",
+        hint: "Устойчивое выражение целиком означает «дружно, согласно».",
+        explanation: "«Душа в душу» — устойчивое сочетание со значением «дружно, в полном согласии». Это фразеологизм."
+      },
+      {
+        id: 44,
+        parts: ["Над городом нависло ", "покрывало туч", "."],
+        answer: "Метафора",
+        hint: "Слой туч прямо назван покрывалом; союза сравнения нет.",
+        explanation: "Сплошной слой туч представлен как покрывало. Скрытое уподобление без союза — метафора."
+      },
+      {
+        id: 45,
+        parts: ["Дорога извивалась между холмами, ", "как блестящая шёлковая лента", "."],
+        answer: "Сравнение",
+        hint: "Сопоставление дороги и ленты присоединено союзом «как».",
+        explanation: "Извилистая дорога прямо сопоставлена с лентой при помощи союза «как». Это сравнение."
+      },
+      {
+        id: 46,
+        parts: ["Нас окружала ", "таинственная, манящая глубина", " древнего хвойного бора."],
+        answer: "Эпитет",
+        hint: "Выделенные определения создают эмоционально окрашенный образ леса.",
+        explanation: "«Таинственная, манящая» — выразительные определения глубины бора. Это эпитеты."
+      },
+      {
+        id: 47,
+        parts: ["Ночной ", "лес чутко прислушивался к каждому шороху", "."],
+        answer: "Олицетворение",
+        hint: "Лесу приписана способность живого существа слышать и прислушиваться.",
+        explanation: "Лес наделён способностью прислушиваться. Это олицетворение."
+      },
+      {
+        id: 48,
+        parts: ["Услышав грозный окрик командира, юноша окончательно ", "потерял голову", "."],
+        answer: "Фразеологизм",
+        hint: "Слова имеют не буквальное, а устойчивое значение «утратить самообладание».",
+        explanation: "«Потерять голову» означает растеряться или утратить самообладание. Это фразеологизм."
+      },
+      {
+        id: 49,
+        parts: ["В своих воспоминаниях старик бережно перебирал ", "бисер времени", "."],
+        answer: "Метафора",
+        hint: "Отдельные мгновения жизни представлены как бусины.",
+        explanation: "Мгновения времени уподоблены бисеру, который можно перебирать. Это метафора."
+      },
+      {
+        id: 50,
+        parts: ["Молодые побеги тянулись к солнцу, ", "точно голодные птенцы к пище", "."],
+        answer: "Сравнение",
+        hint: "Сопоставление вводится словом «точно».",
+        explanation: "Побеги сопоставлены с голодными птенцами при помощи слова «точно». Это сравнение."
+      }
+    ];
+
+    const elements = {
+      startScreen: document.getElementById("startScreen"),
+      gameScreen: document.getElementById("gameScreen"),
+      resultScreen: document.getElementById("resultScreen"),
+      resumeBox: document.getElementById("resumeBox"),
+      resumeDescription: document.getElementById("resumeDescription"),
+      resumeBtn: document.getElementById("resumeBtn"),
+      trainingCount: document.getElementById("trainingCount"),
+      startTrainingBtn: document.getElementById("startTrainingBtn"),
+      startCheckBtn: document.getElementById("startCheckBtn"),
+      openTheoryStartBtn: document.getElementById("openTheoryStartBtn"),
+      homeBtn: document.getElementById("homeBtn"),
+      openTheoryGameBtn: document.getElementById("openTheoryGameBtn"),
+      modeBadge: document.getElementById("modeBadge"),
+      questionCounter: document.getElementById("questionCounter"),
+      timerDisplay: document.getElementById("timerDisplay"),
+      progressBar: document.getElementById("progressBar"),
+      sentenceBefore: document.getElementById("sentenceBefore"),
+      sentenceTarget: document.getElementById("sentenceTarget"),
+      sentenceAfter: document.getElementById("sentenceAfter"),
+      answersGrid: document.getElementById("answersGrid"),
+      feedback: document.getElementById("feedback"),
+      feedbackIcon: document.getElementById("feedbackIcon"),
+      feedbackTitle: document.getElementById("feedbackTitle"),
+      feedbackText: document.getElementById("feedbackText"),
+      nextBtn: document.getElementById("nextBtn"),
+      scoreRing: document.getElementById("scoreRing"),
+      scorePercent: document.getElementById("scorePercent"),
+      resultTitle: document.getElementById("resultTitle"),
+      resultMessage: document.getElementById("resultMessage"),
+      correctStat: document.getElementById("correctStat"),
+      timeStat: document.getElementById("timeStat"),
+      modeStat: document.getElementById("modeStat"),
+      categoryResults: document.getElementById("categoryResults"),
+      recommendation: document.getElementById("recommendation"),
+      mistakesSection: document.getElementById("mistakesSection"),
+      mistakesList: document.getElementById("mistakesList"),
+      repeatMistakesBtn: document.getElementById("repeatMistakesBtn"),
+      restartBtn: document.getElementById("restartBtn"),
+      openTheoryResultBtn: document.getElementById("openTheoryResultBtn"),
+      theoryDialog: document.getElementById("theoryDialog"),
+      closeTheoryBtn: document.getElementById("closeTheoryBtn")
+    };
+
+    let state = null;
+    let timerHandle = null;
+    let completedState = null;
+
+    function shuffle(items) {
+      const result = items.slice();
+      for (let i = result.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = result[i];
+        result[i] = result[j];
+        result[j] = temp;
+      }
+      return result;
+    }
+
+    function questionById(id) {
+      return QUESTIONS.find(function (question) {
+        return question.id === id;
+      });
+    }
+
+    function balancedQuestionIds(count) {
+      const perCategory = count / CATEGORIES.length;
+      const ids = [];
+      CATEGORIES.forEach(function (category) {
+        const categoryQuestions = shuffle(QUESTIONS.filter(function (question) {
+          return question.answer === category;
+        }));
+        categoryQuestions.slice(0, perCategory).forEach(function (question) {
+          ids.push(question.id);
+        });
+      });
+      return shuffle(ids);
+    }
+
+    function initialState(mode, questionIds) {
+      return {
+        version: DATA_VERSION,
+        mode: mode,
+        questionIds: questionIds,
+        index: 0,
+        results: [],
+        attempts: 0,
+        wrongAnswers: [],
+        currentAnswered: false,
+        startedAt: Date.now()
+      };
+    }
+
+    function isValidState(candidate) {
+      if (!candidate || candidate.version !== DATA_VERSION) return false;
+      if (candidate.mode !== "training" && candidate.mode !== "check") return false;
+      if (!Array.isArray(candidate.questionIds) || !candidate.questionIds.length) return false;
+      if (!candidate.questionIds.every(function (id) { return Boolean(questionById(id)); })) return false;
+      if (!Number.isInteger(candidate.index) || candidate.index < 0 || candidate.index >= candidate.questionIds.length) return false;
+      if (!Array.isArray(candidate.results) || !Array.isArray(candidate.wrongAnswers)) return false;
+      return true;
+    }
+
+    function loadSavedState() {
+      try {
+        const candidate = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return isValidState(candidate) ? candidate : null;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function saveState() {
+      if (!state) return;
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (error) {
+        /* Тренажёр остаётся рабочим, даже если локальное хранилище недоступно. */
+      }
+    }
+
+    function clearSavedState() {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (error) {
+        /* Нечего делать. */
+      }
+    }
+
+    function showScreen(screenName) {
+      elements.startScreen.hidden = screenName !== "start";
+      elements.gameScreen.hidden = screenName !== "game";
+      elements.resultScreen.hidden = screenName !== "result";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function formatTime(totalSeconds) {
+      const safeSeconds = Math.max(0, Math.floor(totalSeconds));
+      const minutes = Math.floor(safeSeconds / 60);
+      const seconds = safeSeconds % 60;
+      return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+    }
+
+    function elapsedSeconds(sourceState) {
+      return Math.floor((Date.now() - sourceState.startedAt) / 1000);
+    }
+
+    function startTimer() {
+      stopTimer();
+      updateTimer();
+      timerHandle = window.setInterval(updateTimer, 1000);
+    }
+
+    function stopTimer() {
+      if (timerHandle !== null) {
+        window.clearInterval(timerHandle);
+        timerHandle = null;
+      }
+    }
+
+    function updateTimer() {
+      if (!state) return;
+      elements.timerDisplay.textContent = formatTime(elapsedSeconds(state));
+    }
+
+    function updateResumeBox() {
+      const saved = loadSavedState();
+      if (!saved) {
+        elements.resumeBox.hidden = true;
+        return;
+      }
+      const modeText = saved.mode === "training" ? "Тренировка" : "Проверка";
+      elements.resumeDescription.textContent = modeText + ": задание " + (saved.index + 1) + " из " + saved.questionIds.length + ".";
+      elements.resumeBox.hidden = false;
+    }
+
+    function startSession(mode, count, explicitIds) {
+      const ids = explicitIds ? shuffle(explicitIds.slice()) : balancedQuestionIds(count);
+      state = initialState(mode, ids);
+      completedState = null;
+      saveState();
+      showScreen("game");
+      renderQuestion();
+      startTimer();
+    }
+
+    function resumeSession() {
+      const saved = loadSavedState();
+      if (!saved) {
+        updateResumeBox();
+        return;
+      }
+      state = saved;
+      completedState = null;
+      showScreen("game");
+      renderQuestion();
+      startTimer();
+    }
+
+    function currentQuestion() {
+      return questionById(state.questionIds[state.index]);
+    }
+
+    function setFeedback(kind, icon, title, text) {
+      elements.feedback.className = "feedback " + kind;
+      elements.feedbackIcon.textContent = icon;
+      elements.feedbackTitle.textContent = title;
+      elements.feedbackText.textContent = text;
+      elements.feedback.hidden = false;
+    }
+
+    function hideFeedback() {
+      elements.feedback.hidden = true;
+      elements.feedback.className = "feedback";
+      elements.feedbackIcon.textContent = "";
+      elements.feedbackTitle.textContent = "";
+      elements.feedbackText.textContent = "";
+    }
+
+    function renderAnswers(question) {
+      elements.answersGrid.replaceChildren();
+      CATEGORIES.forEach(function (category) {
+        const button = document.createElement("button");
+        button.className = "answer-btn";
+        button.type = "button";
+        button.textContent = category;
+        button.dataset.answer = category;
+        button.addEventListener("click", function () {
+          handleAnswer(category);
+        });
+        elements.answersGrid.appendChild(button);
+      });
+
+      if (state.currentAnswered) {
+        restoreCompletedAnswer(question);
+      } else if (state.mode === "training" && state.attempts === 1 && state.wrongAnswers.length) {
+        const wrongCategory = state.wrongAnswers[0];
+        const wrongButton = findAnswerButton(wrongCategory);
+        if (wrongButton) {
+          wrongButton.disabled = true;
+          wrongButton.classList.add("is-wrong");
+        }
+        setFeedback("warning", "!", "Пока неверно — попробуйте ещё раз", question.hint);
+      }
+    }
+
+    function findAnswerButton(category) {
+      return Array.from(elements.answersGrid.querySelectorAll(".answer-btn")).find(function (button) {
+        return button.dataset.answer === category;
+      });
+    }
+
+    function disableAllAnswers() {
+      elements.answersGrid.querySelectorAll(".answer-btn").forEach(function (button) {
+        button.disabled = true;
+      });
+    }
+
+    function lastCurrentResult(question) {
+      for (let i = state.results.length - 1; i >= 0; i -= 1) {
+        if (state.results[i].questionId === question.id) return state.results[i];
+      }
+      return null;
+    }
+
+    function restoreCompletedAnswer(question) {
+      const result = lastCurrentResult(question);
+      if (!result) return;
+      disableAllAnswers();
+      const selectedButton = findAnswerButton(result.selected);
+      if (selectedButton) selectedButton.classList.add(state.mode === "check" ? "is-selected" : (result.selected === question.answer ? "is-correct" : "is-wrong"));
+      if (state.mode === "training") {
+        const correctButton = findAnswerButton(question.answer);
+        if (correctButton) correctButton.classList.add("is-correct");
+        if (result.firstTryCorrect) {
+          setFeedback("success", "✓", "Верно", question.explanation);
+        } else if (result.selected === question.answer) {
+          setFeedback("success", "✓", "Теперь верно", question.explanation);
+        } else {
+          setFeedback("error", "×", "Правильный ответ: " + question.answer, question.explanation);
+        }
+      } else {
+        setFeedback("neutral", "✓", "Ответ принят", "Правильные ответы и пояснения появятся после завершения работы.");
+      }
+      elements.nextBtn.hidden = false;
+    }
+
+    function renderQuestion() {
+      const question = currentQuestion();
+      const total = state.questionIds.length;
+      elements.modeBadge.textContent = state.mode === "training" ? "Тренировка · 2 попытки" : "Проверка · 1 попытка";
+      elements.openTheoryGameBtn.hidden = state.mode === "check";
+      elements.questionCounter.textContent = "Задание " + (state.index + 1) + " из " + total;
+      elements.progressBar.style.width = (((state.index + 1) / total) * 100) + "%";
+      elements.sentenceBefore.textContent = question.parts[0];
+      elements.sentenceTarget.textContent = question.parts[1];
+      elements.sentenceAfter.textContent = question.parts[2];
+      elements.nextBtn.textContent = state.index === total - 1 ? "Показать результат" : "Следующее задание";
+      elements.nextBtn.hidden = true;
+      hideFeedback();
+      renderAnswers(question);
+      saveState();
+      window.setTimeout(function () {
+        const firstButton = elements.answersGrid.querySelector("button");
+        if (firstButton && !state.currentAnswered) firstButton.focus({ preventScroll: true });
+      }, 0);
+    }
+
+    function addResult(question, selected, firstTryCorrect) {
+      state.results.push({
+        questionId: question.id,
+        selected: selected,
+        firstTryCorrect: firstTryCorrect,
+        wrongAnswers: state.wrongAnswers.slice()
+      });
+      state.currentAnswered = true;
+      saveState();
+      restoreCompletedAnswer(question);
+    }
+
+    function handleAnswer(selected) {
+      if (!state || state.currentAnswered) return;
+      const question = currentQuestion();
+      state.attempts += 1;
+
+      if (state.mode === "check") {
+        addResult(question, selected, selected === question.answer);
+        return;
+      }
+
+      if (selected === question.answer) {
+        addResult(question, selected, state.attempts === 1);
+        return;
+      }
+
+      state.wrongAnswers.push(selected);
+      if (state.attempts < 2) {
+        const button = findAnswerButton(selected);
+        if (button) {
+          button.disabled = true;
+          button.classList.add("is-wrong");
+        }
+        setFeedback("warning", "!", "Пока неверно — попробуйте ещё раз", question.hint);
+        saveState();
+        return;
+      }
+
+      addResult(question, selected, false);
+    }
+
+    function goToNextQuestion() {
+      if (!state || !state.currentAnswered) return;
+      if (state.index >= state.questionIds.length - 1) {
+        finishSession();
+        return;
+      }
+      state.index += 1;
+      state.attempts = 0;
+      state.wrongAnswers = [];
+      state.currentAnswered = false;
+      renderQuestion();
+    }
+
+    function titleForPercent(percent) {
+      if (percent >= 90) return "Отличный результат";
+      if (percent >= 75) return "Хорошая работа";
+      if (percent >= 60) return "Основа усвоена";
+      return "Памятка поможет улучшить результат";
+    }
+
+    function messageForPercent(percent) {
+      if (percent === 100) return "Все ответы с первой попытки верны. Вы уверенно различаете средства выразительности.";
+      if (percent >= 90) return "Ошибок совсем немного. Разберите их — и тема будет освоена полностью.";
+      if (percent >= 75) return "Большая часть заданий выполнена верно. Повторите темы, отмеченные ниже.";
+      if (percent >= 60) return "Вы различаете основные признаки, но некоторые средства пока смешиваются.";
+      return "Сначала повторите памятку, затем пройдите работу над ошибками в спокойном темпе.";
+    }
+
+    function appendMarkedSentence(container, question) {
+      const before = document.createTextNode(question.parts[0]);
+      const mark = document.createElement("mark");
+      const after = document.createTextNode(question.parts[2]);
+      mark.textContent = question.parts[1];
+      container.append(before, mark, after);
+    }
+
+    function renderCategoryResults(sourceState) {
+      elements.categoryResults.replaceChildren();
+      const scores = [];
+      CATEGORIES.forEach(function (category) {
+        const categoryResults = sourceState.results.filter(function (result) {
+          return questionById(result.questionId).answer === category;
+        });
+        const correct = categoryResults.filter(function (result) { return result.firstTryCorrect; }).length;
+        const total = categoryResults.length;
+        scores.push({ category: category, correct: correct, total: total, ratio: total ? correct / total : 1 });
+
+        const card = document.createElement("div");
+        card.className = "category-result";
+        const score = document.createElement("strong");
+        score.textContent = correct + "/" + total;
+        const label = document.createElement("span");
+        label.textContent = category;
+        card.append(score, label);
+        elements.categoryResults.appendChild(card);
+      });
+
+      const weak = scores.filter(function (item) {
+        return item.total > 0 && item.ratio < 1;
+      }).sort(function (a, b) {
+        return a.ratio - b.ratio;
+      });
+
+      if (!weak.length) {
+        elements.recommendation.textContent = "Рекомендация: результат ровный по всем пяти темам. Для закрепления можно пройти проверку ещё раз с новым набором заданий.";
+      } else {
+        const lowestRatio = weak[0].ratio;
+        const weakestNames = weak.filter(function (item) { return item.ratio === lowestRatio; }).map(function (item) { return item.category.toLowerCase(); });
+        elements.recommendation.textContent = "Рекомендация: в первую очередь повторите " + weakestNames.join(" и ") + ". Затем выполните работу над ошибками.";
+      }
+    }
+
+    function renderMistakes(sourceState) {
+      const mistakes = sourceState.results.filter(function (result) { return !result.firstTryCorrect; });
+      elements.mistakesList.replaceChildren();
+      elements.mistakesSection.hidden = mistakes.length === 0;
+      elements.repeatMistakesBtn.hidden = mistakes.length === 0;
+
+      mistakes.forEach(function (result, index) {
+        const question = questionById(result.questionId);
+        const card = document.createElement("article");
+        card.className = "mistake-card";
+
+        const number = document.createElement("div");
+        number.className = "mistake-number";
+        number.textContent = "Ошибка " + (index + 1);
+
+        const sentence = document.createElement("div");
+        sentence.className = "mistake-sentence";
+        appendMarkedSentence(sentence, question);
+
+        const meta = document.createElement("div");
+        meta.className = "mistake-meta";
+        const selected = document.createElement("span");
+        const wrongList = result.wrongAnswers && result.wrongAnswers.length ? result.wrongAnswers.join(", ") : result.selected;
+        selected.textContent = "Ваш ответ: " + wrongList;
+        const correct = document.createElement("span");
+        correct.textContent = "Правильный ответ: " + question.answer;
+        meta.append(selected, correct);
+
+        const explanation = document.createElement("p");
+        explanation.className = "mistake-explanation";
+        explanation.textContent = question.explanation;
+
+        card.append(number, sentence, meta, explanation);
+        elements.mistakesList.appendChild(card);
+      });
+    }
+
+    function finishSession() {
+      stopTimer();
+      completedState = JSON.parse(JSON.stringify(state));
+      completedState.finishedAt = Date.now();
+      const correct = completedState.results.filter(function (result) { return result.firstTryCorrect; }).length;
+      const total = completedState.results.length;
+      const percent = total ? Math.round((correct / total) * 100) : 0;
+      const duration = Math.floor((completedState.finishedAt - completedState.startedAt) / 1000);
+
+      elements.scorePercent.textContent = percent + "%";
+      elements.scoreRing.style.background = "conic-gradient(var(--blue-700) 0deg, var(--blue-700) " + (percent * 3.6) + "deg, #e2e9f0 " + (percent * 3.6) + "deg)";
+      elements.resultTitle.textContent = titleForPercent(percent);
+      elements.resultMessage.textContent = messageForPercent(percent);
+      elements.correctStat.textContent = correct + " из " + total;
+      elements.timeStat.textContent = formatTime(duration);
+      elements.modeStat.textContent = completedState.mode === "training" ? "Тренировка" : "Проверка";
+      renderCategoryResults(completedState);
+      renderMistakes(completedState);
+
+      clearSavedState();
+      state = null;
+      showScreen("result");
+    }
+
+    function repeatMistakes() {
+      if (!completedState) return;
+      const ids = completedState.results.filter(function (result) {
+        return !result.firstTryCorrect;
+      }).map(function (result) {
+        return result.questionId;
+      });
+      if (ids.length) startSession("training", ids.length, ids);
+    }
+
+    function returnHome(preserveProgress) {
+      stopTimer();
+      if (!preserveProgress) {
+        state = null;
+        clearSavedState();
+      }
+      showScreen("start");
+      updateResumeBox();
+    }
+
+    function openTheory() {
+      if (elements.theoryDialog.showModal) {
+        elements.theoryDialog.showModal();
+      } else {
+        elements.theoryDialog.setAttribute("open", "");
+      }
+    }
+
+    function closeTheory() {
+      if (elements.theoryDialog.close) {
+        elements.theoryDialog.close();
+      } else {
+        elements.theoryDialog.removeAttribute("open");
+      }
+    }
+
+    elements.startTrainingBtn.addEventListener("click", function () {
+      startSession("training", Number(elements.trainingCount.value));
+    });
+
+    elements.startCheckBtn.addEventListener("click", function () {
+      startSession("check", 20);
+    });
+
+    elements.resumeBtn.addEventListener("click", resumeSession);
+    elements.nextBtn.addEventListener("click", goToNextQuestion);
+    elements.homeBtn.addEventListener("click", function () { returnHome(true); });
+    elements.repeatMistakesBtn.addEventListener("click", repeatMistakes);
+    elements.restartBtn.addEventListener("click", function () { returnHome(false); });
+    elements.openTheoryStartBtn.addEventListener("click", openTheory);
+    elements.openTheoryGameBtn.addEventListener("click", openTheory);
+    elements.openTheoryResultBtn.addEventListener("click", openTheory);
+    elements.closeTheoryBtn.addEventListener("click", closeTheory);
+    elements.theoryDialog.addEventListener("click", function (event) {
+      if (event.target === elements.theoryDialog) closeTheory();
+    });
+
+    updateResumeBox();
+  </script>
+</body>
+</html>
